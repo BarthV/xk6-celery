@@ -105,6 +105,10 @@ func (mi *CeleryInstance) NewCeleryRedis(call goja.ConstructorCall) *goja.Object
 	}
 
 	opts.applyDefaults()
+	err = opts.validate()
+	if err != nil {
+		common.Throw(rt, fmt.Errorf("invalid options; reason: %w", err))
+	}
 
 	// TODO: Set dedicated opts for redis pool config
 	redisPool := &redis.Pool{
@@ -176,6 +180,22 @@ func (o *options) applyDefaults() {
 	if o.GetRetryInterval.Duration == 0 {
 		o.GetRetryInterval.Duration = 50 * time.Millisecond
 	}
+}
+
+func (o *options) validate() error {
+	if o.Timeout.Duration <= o.GetRetryInterval.Duration {
+		return fmt.Errorf("celery backend timeout duration cannot be shorter than check interval")
+	}
+
+	if o.Queue == "" {
+		return fmt.Errorf("celery target queue cannot be empty")
+	}
+
+	if o.Url == "" {
+		return fmt.Errorf("celery endpoint URL cannot be empty")
+	}
+
+	return nil
 }
 
 // newOptionsFrom validates and instantiates an options struct from its map representation

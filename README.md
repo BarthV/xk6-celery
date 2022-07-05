@@ -46,6 +46,7 @@ const client = new celery.Redis({
 const taskID = client.delay("my_task", "text-value", 101, ["any", "arg", "type", "allowed"]);
 
 // Check if task have been completed (whether it's a success or not)
+// boolean returned
 const processed = client.taskCompleted(taskID);
 if processed === True {
   console.log("Task processed");
@@ -54,6 +55,7 @@ if processed === True {
 }
 
 // Wait for task completion using a blocking func call
+// boolean returned (returns false if we hit timeout)
 const deadlineCompleted = client.waitForTaskCompleted(taskID);
 console.log(`Task completed within a timeframe = ${deadlineCompleted}`);
 ```

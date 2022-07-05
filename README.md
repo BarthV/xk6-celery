@@ -1,6 +1,6 @@
 # xk6-celery
 A simple Celery tasks submitter/checker extension for k6.
-It relies on github.com/gocelery/gocelery library & use redis connection pooling at K6 object level.
+It relies on `github.com/gocelery/gocelery` library & use redis connection pooling at K6 object level.
 
 ## Known current limitations
 * This extension is only meant to sumbit Celery tasks and (eventually) check task completion.

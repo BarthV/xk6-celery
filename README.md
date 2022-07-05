@@ -72,13 +72,13 @@ example :
 ```javascript
 const client = new celery.Redis({
   "url": "redis://my-redis:6379/0",
-	"queue": "worker-queue-1",
-	"timeout": "10s",
-	"getinterval": "100ms",
+  "queue": "worker-queue-1",
+  "timeout": "10s",
+  "getinterval": "100ms",
 });
 ```
 
 ## Future
 * add check success functions
 * support AMQP
-* clean code & add more opts
+* clean code/tests & add more opts

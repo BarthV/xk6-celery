@@ -4,7 +4,7 @@ export default function () {
 
   const redisUrl = "redis://127.0.0.1:6379/0";
   const celeryQueue = "realtime";
-  let client = new celery.Redis({
+  const client = new celery.Redis({
     url: redisUrl,
     queue: celeryQueue,
     timeout: "10s",
@@ -27,7 +27,7 @@ export default function () {
   completed = client.waitForTaskCompleted(taskID);
   console.log(`Task completed = ${completed}`);
 
-  // This call should timeout since job does not exists
+  // This call should timeout and always return false since task does not exist
   completed = client.waitForTaskCompleted("non-existing-task");
   console.log(`Task completed = ${completed}`);
 }

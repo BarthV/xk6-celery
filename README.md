@@ -35,6 +35,8 @@ This will result in a `k6` binary in the current directory.
 ## Functions
 
 ```javascript
+import celery from 'k6/x/celery';
+
 // Create a new Celery Redis Client
 const client = new celery.Redis({
   url: "redis://127.0.0.1:6379",

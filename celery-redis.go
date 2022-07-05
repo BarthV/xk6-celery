@@ -83,8 +83,7 @@ func (*CeleryModule) NewModuleInstance(vu modules.VU) modules.Instance {
 type Celery struct {
 	vu               modules.VU
 	client           *gocelery.CeleryClient
-	redisBackend     *gocelery.RedisCeleryBackend
-	amqpBackend      *gocelery.AMQPCeleryBackend
+	backend          *gocelery.RedisCeleryBackend
 	queue            string
 	timeout          time.Duration
 	getRetryInterval time.Duration
@@ -148,7 +147,7 @@ func (mi *CeleryInstance) NewCeleryRedis(call goja.ConstructorCall) *goja.Object
 	CeleryClient := &Celery{
 		vu:               mi.vu,
 		client:           c,
-		redisBackend:     redisBackend,
+		backend:          redisBackend,
 		queue:            opts.Queue,
 		timeout:          opts.Timeout.Duration,
 		getRetryInterval: opts.GetRetryInterval.Duration,
@@ -231,7 +230,7 @@ func (c *Celery) Delay(taskName string, args ...interface{}) (string, error) {
 // Check if task result is filled or still empty
 // It's a sync call with instant result.
 func (c *Celery) TaskCompleted(taskID string) (bool, error) {
-	result, err := c.redisBackend.GetResult(taskID)
+	result, err := c.backend.GetResult(taskID)
 	if err != nil {
 		if err.Error() == "result not available" { // error message is hardcoded in client lib
 			return false, nil
